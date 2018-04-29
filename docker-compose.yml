@@ -4,6 +4,7 @@ services:
   traefik:
     image: traefik
     command: --docker.domain=${DOMAIN} --logLevel=${LOG_LEVEL}
+    container_name: traefik
     restart: unless-stopped
     ports:
       - 80:80
@@ -26,6 +27,7 @@ services:
 
   portainer:
     image: portainer/portainer
+    container_name: portainer
     restart: unless-stopped
     # ports:
     #  - 9000:9000
