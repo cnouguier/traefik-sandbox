@@ -5,7 +5,5 @@ route:
 receivers:
     - name: 'slack'
       slack_configs:
-          - send_resolved: true
-            username: '<username>'
-            channel: '#<channel-name>'
-            api_url: '<incomming-webhook-url>'
+          - api_url: 'https://hooks.slack.com/services/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'
+            channel: '#alerts'
