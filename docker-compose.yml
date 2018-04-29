@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  traefik:
+    image: traefik
+    container_name: traefik
+    command: --docker.domain=${DOMAIN} --logLevel=${LOG_LEVEL}
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+      - 8080:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.toml:/traefik.toml
+      - ./acme:/acme
+      - ./logs:/logs
+    networks:
+      - ${PLATFORM}-network
+    labels:
+      - "traefik.backend=traefik"
+      - "traefik.enable=true"      
+      - "traefik.docker.network=${PLATFORM}-network"
+      - "traefik.port=8080"
+      - "traefik.frontend.entryPoints=http,https"
+      - "traefik.frontend.rule=Host:traefik.${PLATFORM}.${DOMAIN}"
+
+  portainer:
+    image: portainer/portainer
+    container_name: portainer
+    restart: unless-stopped
+    # ports:
+    #  - 9000:9000
+    volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - ./portainer:/data
+    networks:
+      - ${PLATFORM}-network
+    labels:
+      - "traefik.backend=portainer"
+      - "traefik.enable=true"      
+      - "traefik.docker.network=${PLATFORM}-network"
+      - "traefik.port=9000"
+      - "traefik.frontend.entryPoints=http,https"
+      - "traefik.frontend.rule=Host:portainer.${PLATFORM}.${DOMAIN}"
+
+networks:
+  ${PLATFORM}-network:

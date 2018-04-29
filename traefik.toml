@@ -1,0 +1,29 @@
+debug = false
+
+logLevel = "ERROR"
+
+defaultEntryPoints = ["http"]
+
+[entryPoints]
+  [entryPoints.http]
+  address = ":80"
+
+[docker]
+endpoint = "unix:///var/run/docker.sock"
+watch = true
+exposedbydefault = false
+
+[ping]
+entryPoint = "http"
+
+[metrics]
+  [metrics.prometheus]
+  entryPoint = "http"
+  buckets = [0.1,0.3,1.2,5.0]
+
+[traefikLog]
+filePaht = "/logs/traefik.log"
+
+[accessLog]
+filePath = "/logs/access.log"
+
