@@ -3,7 +3,7 @@ version: '3'
 services:
   traefik:
     image: traefik
-    command: --docker.domain=${DOMAIN} --logLevel=${LOG_LEVEL}
+    command: --api --docker --docker.domain=${DOMAIN} --logLevel=${LOG_LEVEL}
     container_name: traefik
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
