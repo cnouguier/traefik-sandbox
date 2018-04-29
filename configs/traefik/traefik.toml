@@ -22,7 +22,7 @@ entryPoint = "http"
   buckets = [0.1,0.3,1.2,5.0]
 
 [traefikLog]
-filePaht = "/logs/traefik.log"
+filePath = "/logs/traefik.log"
 
 [accessLog]
 filePath = "/logs/access.log"
