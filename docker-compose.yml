@@ -13,14 +13,14 @@ services:
     ports:
       - 80:80
       - 443:443
-      - 8081:8080
+      - 8080:8080
     networks:
       - traefik-network
     labels:
       - "traefik.backend=traefik"
       - "traefik.enable=true"      
       - "traefik.docker.network=traefik-network"
-      - "traefik.port=8081"
+      - "traefik.port=8080"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.frontend.rule=Host:traefik.${PLATFORM}.${DOMAIN}"
     restart: unless-stopped
