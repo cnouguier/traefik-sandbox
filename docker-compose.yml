@@ -42,7 +42,7 @@ services:
       - "traefik.port=9000"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.frontend.rule=Host:portainer.${PLATFORM}.${DOMAIN}"
-   restart: unless-stopped
+    restart: unless-stopped
 
    prometheus:
     image: prom/prometheus:v2.1.0
