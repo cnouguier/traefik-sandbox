@@ -4,6 +4,13 @@ logLevel = "ERROR"
 
 defaultEntryPoints = ["http"]
 
+
+[traefikLog]
+filePath = "/logs/traefik.log"
+
+[accessLog]
+filePath = "/logs/access.log"
+
 [entryPoints]
   [entryPoints.http]
   address = ":80"
@@ -25,9 +32,4 @@ entryPoint = "http"
 entryPoint = "admin"
 dashboard = true
 
-[traefikLog]
-filePath = "/logs/traefik.log"
-
-[accessLog]
-filePath = "/logs/access.log"
 
