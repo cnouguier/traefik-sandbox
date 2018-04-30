@@ -14,6 +14,8 @@ services:
       - 80:80
       - 443:443
       - 8080:8080
+    networks:
+      - platform-network
     labels:
       - "traefik.backend=traefik"
       - "traefik.enable=true"      
@@ -74,15 +76,15 @@ services:
   node-exporter:
     image: prom/node-exporter
     container_name: nodeexporter
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
     command: 
       - '--path.procfs=/host/proc' 
       - '--path.sysfs=/host/sys'
       - --collector.filesystem.ignored-mount-points
       - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
     ports:
       - 9100:9100
     networks:
@@ -159,5 +161,5 @@ volumes:
   grafana_data: {}
 
 networks:
-  platform-networks:
+  platform-network:
     name: ${PLATFORM}_network
