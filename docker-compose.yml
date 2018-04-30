@@ -14,12 +14,10 @@ services:
       - 80:80
       - 443:443
       - 8080:8080
-    networks:
-      - traefik-network
     labels:
       - "traefik.backend=traefik"
       - "traefik.enable=true"      
-      - "traefik.docker.network=traefik-network"
+      - "traefik.docker.network=${PLATFORM}_default"
       - "traefik.port=8080"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.frontend.rule=Host:traefik.${PLATFORM}.${DOMAIN}"
@@ -33,12 +31,10 @@ services:
       - ./configs/portainer:/data
     ports:
       - 9000:9000
-    networks:
-      - traefik-network
     labels:
       - "traefik.backend=portainer"
       - "traefik.enable=true"      
-      - "traefik.docker.network=traefik-network"
+      - "traefik.docker.network=${PLATFORM}_default"
       - "traefik.port=9000"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.frontend.rule=Host:portainer.${PLATFORM}.${DOMAIN}"
@@ -62,12 +58,10 @@ services:
     links:
       - cadvisor:cadvisor
       - alertmanager:alertmanager
-    networks:
-      - traefik-network
     labels:
       - "traefik.backend=prometheus"
       - "traefik.enable=true"      
-      - "traefik.docker.network=traefik-network"
+      - "traefik.docker.network=${PLATFORM}_default"
       - "traefik.port=9090"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.frontend.rule=Host:prometheus.${PLATFORM}.${DOMAIN}"
@@ -88,7 +82,7 @@ services:
     ports:
       - 9100:9100
     networks:
-      - traefik-network
+      - ${PLATFORM}_default
     restart: unless-stopped
 
   alertmanager:
@@ -101,12 +95,10 @@ services:
       - ./configs/alertmanager/:/etc/alertmanager/
     ports:
       - 9093:9093
-    networks:
-      - traefik-network
     labels:
       - "traefik.backend=alertmanager"
       - "traefik.enable=true"      
-      - "traefik.docker.network=traefik-network"
+      - "traefik.docker.network=${PLATFORM}_default"
       - "traefik.port=9093"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.frontend.rule=Host:alertmanager.${PLATFORM}.${DOMAIN}"
@@ -122,12 +114,10 @@ services:
       - /var/lib/docker/:/var/lib/docker:ro
     ports:
       - 8081:8080
-    networks:
-      - traefik-network
     labels:
       - "traefik.backend=cadvisor"
       - "traefik.enable=true"      
-      - "traefik.docker.network=traefik-network"
+      - "traefik.docker.network=${PLATFORM}_default"
       - "traefik.port=8080"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.frontend.rule=Host:cadvisor.${PLATFORM}.${DOMAIN}"
@@ -145,12 +135,10 @@ services:
       - ./configs/grafana/provisioning/:/etc/grafana/provisioning/
     env_file:
       - ./configs/grafana/config.monitoring
-    networks:
-      - traefik-network
     labels:
       - "traefik.backend=grafana"
       - "traefik.enable=true"      
-      - "traefik.docker.network=traefik-network"
+      - "traefik.docker.network=${PLATFORM}_default"
       - "traefik.port=3000"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.frontend.rule=Host:grafana.${PLATFORM}.${DOMAIN}"
@@ -161,4 +149,4 @@ volumes:
   grafana_data: {}
 
 networks:
-  traefik-network:
+  default:
