@@ -17,7 +17,7 @@ services:
     labels:
       - "traefik.backend=traefik"
       - "traefik.enable=true"      
-      - "traefik.docker.network=${PLATFORM}_default"
+      - "traefik.docker.network=${PLATFORM}_network"
       - "traefik.port=8080"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.frontend.rule=Host:traefik.${PLATFORM}.${DOMAIN}"
@@ -31,10 +31,12 @@ services:
       - ./configs/portainer:/data
     ports:
       - 9000:9000
+    network:
+      - platform-network
     labels:
       - "traefik.backend=portainer"
       - "traefik.enable=true"      
-      - "traefik.docker.network=${PLATFORM}_default"
+      - "traefik.docker.network=${PLATFORM}_network"
       - "traefik.port=9000"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.frontend.rule=Host:portainer.${PLATFORM}.${DOMAIN}"
@@ -55,13 +57,15 @@ services:
       - cadvisor
     ports:
       - 9090:9090
+    network:
+      - platform-network
     links:
       - cadvisor:cadvisor
       - alertmanager:alertmanager
     labels:
       - "traefik.backend=prometheus"
       - "traefik.enable=true"      
-      - "traefik.docker.network=${PLATFORM}_default"
+      - "traefik.docker.network=${PLATFORM}_network"
       - "traefik.port=9090"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.frontend.rule=Host:prometheus.${PLATFORM}.${DOMAIN}"
@@ -69,7 +73,7 @@ services:
 
   node-exporter:
     image: prom/node-exporter
-    container_name: node-exporter
+    container_name: nodeexporter
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
@@ -81,6 +85,8 @@ services:
       - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
     ports:
       - 9100:9100
+    network:
+      - platform-network
     restart: unless-stopped
 
   alertmanager:
@@ -93,10 +99,12 @@ services:
       - ./configs/alertmanager/:/etc/alertmanager/
     ports:
       - 9093:9093
+    network:
+      - platform-network
     labels:
       - "traefik.backend=alertmanager"
       - "traefik.enable=true"      
-      - "traefik.docker.network=${PLATFORM}_default"
+      - "traefik.docker.network=${PLATFORM}_network"
       - "traefik.port=9093"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.frontend.rule=Host:alertmanager.${PLATFORM}.${DOMAIN}"
@@ -112,10 +120,12 @@ services:
       - /var/lib/docker/:/var/lib/docker:ro
     ports:
       - 8081:8080
+    network:
+      - platform-network
     labels:
       - "traefik.backend=cadvisor"
       - "traefik.enable=true"      
-      - "traefik.docker.network=${PLATFORM}_default"
+      - "traefik.docker.network=${PLATFORM}_network"
       - "traefik.port=8080"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.frontend.rule=Host:cadvisor.${PLATFORM}.${DOMAIN}"
@@ -124,19 +134,21 @@ services:
   grafana:
     image: grafana/grafana
     container_name: grafana
-    depends_on:
-      - prometheus
-    ports:
-      - 3000:3000
     volumes:
       - grafana_data:/var/lib/grafana
       - ./configs/grafana/provisioning/:/etc/grafana/provisioning/
     env_file:
       - ./configs/grafana/config.monitoring
+    depends_on:
+      - prometheus
+    ports:
+      - 3000:3000
+    network:
+      - platform-network
     labels:
       - "traefik.backend=grafana"
       - "traefik.enable=true"      
-      - "traefik.docker.network=${PLATFORM}_default"
+      - "traefik.docker.network=${PLATFORM}_network"
       - "traefik.port=3000"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.frontend.rule=Host:grafana.${PLATFORM}.${DOMAIN}"
@@ -147,5 +159,5 @@ volumes:
   grafana_data: {}
 
 networks:
-  default:
-    name: ${DOMAIN}-network
+  platform-network:
+    name: ${PLATFORM}_network
