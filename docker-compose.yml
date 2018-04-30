@@ -148,3 +148,4 @@ volumes:
 
 networks:
   default:
+    name: ${DOMAIN}-network
