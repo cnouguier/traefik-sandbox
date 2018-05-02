@@ -23,7 +23,7 @@ groups:
 
   - alert: container_down
     expr: absent(((time() - container_last_seen{name="tileservergl"}) < 5))
-    for: 5s
+    for: 1m
     labels:
       severity: page
     annotations:
