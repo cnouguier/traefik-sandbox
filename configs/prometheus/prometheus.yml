@@ -31,7 +31,7 @@ scrape_configs:
 
   - job_name: 'traefik'
     static_configs:
-      - targets: ['traefik:9000']
+      - targets: ['traefik:8080']
 
   - job_name: 'cadvisor'
     static_configs:
