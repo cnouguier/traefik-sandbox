@@ -94,7 +94,7 @@ services:
     command: 
       - '--config.file=/config/blackbox.yml'
     volumes: 
-      - ./configs/blakbox/:/config/
+      - ./configs/blackbox/:/config/
     networks:
       - platform-network
     restart: unless-stopped
