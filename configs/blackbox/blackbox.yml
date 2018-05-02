@@ -1,0 +1,13 @@
+modules:
+  http_test:
+    prober: http
+    timeout: 5s
+    http:
+      valid_status_codes: [200] 
+      method: GET
+      fail_if_not_ssl: true
+      fail_if_not_matches_regexp:
+        - "traefik.kargo.kalisio.xyz"
+        - "The traefik page"
+      fail_if_matches_regexp:
+        - "404 page not found"
