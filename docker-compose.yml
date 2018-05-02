@@ -97,6 +97,7 @@ services:
     command:
       - '--config.file=/etc/alertmanager/config.yml'
       - '--storage.path=/alertmanager'
+      - '-web.external-url=http://alertmanager.${PLATFORM}.${DOMAIN}'
     volumes:
       - ./configs/alertmanager/:/etc/alertmanager/
     ports:
