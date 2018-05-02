@@ -3,8 +3,8 @@ version: '3.5'
 services:
   traefik:
     image: traefik
-    command: --api --docker --docker.domain=${DOMAIN} --logLevel=${LOG_LEVEL}
     container_name: traefik
+    command: --api --docker --docker.domain=${DOMAIN} --logLevel=${LOG_LEVEL}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./configs/traefik/traefik.toml:/traefik.toml
@@ -45,7 +45,7 @@ services:
     restart: unless-stopped
 
   prometheus:
-    image: prom/prometheus:v2.1.0
+    image: prom/prometheus
     container_name: prometheus
     volumes:
       - ./configs/prometheus/:/etc/prometheus/
@@ -61,10 +61,6 @@ services:
       - 9090:9090
     networks:
       - platform-network
-    links:
-      - cadvisor:cadvisor
-      - alertmanager:alertmanager
-      - traefik:traefik
     labels:
       - "traefik.backend=prometheus"
       - "traefik.enable=true"      
