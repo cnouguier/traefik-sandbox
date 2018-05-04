@@ -22,7 +22,7 @@ groups:
       description: "{{ $labels.instance }} of job {{ $labels.job }} is under high load."
 
   - alert: container_down
-    expr: absent(((time() - container_last_seen{name="tileservergl"}) < 5))
+    expr: absent(((time() - container_last_seen{name="tileservergl"}) < 30))
     for: 1m
     labels:
       severity: page
